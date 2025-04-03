@@ -5,117 +5,243 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calendario de Horarios de Trabajo</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; background-color: #f9f9f9; padding: 20px; }
-        .container { max-width: 600px; margin: auto; padding: 20px; background-color: #fff; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
-        h2 { color: #4CAF50; }
-        input, button { margin: 5px; padding: 8px; border-radius: 4px; border: 1px solid #ccc; }
-        input[type="date"], input[type="time"] { width: 120px; }
-        button { background-color: #4CAF50; color: white; border: none; cursor: pointer; }
-        button:hover { background-color: #45a049; }
-        .turno { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #ccc; }
-        .turno button { background-color: #f44336; color: white; border: none; cursor: pointer; }
-        .turno button:hover { background-color: #e53935; }
+        /* Reseteo básico y fuente global */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7fc;
+            color: #333;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            color: #34495e;
+            margin-top: 20px;
+        }
+
+        /* Estilos del contenedor principal */
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Fijar la sección de agregar turno en la parte superior */
+        .agregar-turno {
+            position: sticky;
+            top: 20px;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+            border-radius: 8px;
+        }
+
+        /* Estilo de los campos de entrada */
+        input[type="date"], input[type="time"], textarea {
+            padding: 12px;
+            font-size: 16px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            width: calc(33.33% - 10px);
+            margin-right: 10px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 80px;
+            resize: none;
+        }
+
+        button {
+            padding: 12px 20px;
+            font-size: 16px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        /* Estilos para la separación de días */
+        .dia {
+            margin-top: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+
+        .dia h4 {
+            color: #2980b9;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        /* Estilo para las tarjetas de turnos */
+        .turno {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: #ecf0f1;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .turno p {
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+
+        /* Mejorar los botones de eliminación */
+        .eliminar-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .eliminar-btn:hover {
+            background-color: #c0392b;
+        }
+
+        /* Estilo para las etiquetas y los campos */
+        .flex-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        /* Separar días de forma más visual */
+        .separador-dia {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border-top: 2px solid #3498db;
+            border-bottom: 2px solid #3498db;
+            padding: 5px 0;
+        }
+
+        /* Estilo para la lista de turnos (permitir desplazamiento) */
+        #listaTurnos {
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
     </style>
 </head>
 <body>
     <h2>Calendario de Horarios de Trabajo</h2>
     <div class="container">
-        <h3>Agregar Turno</h3>
-        <input type="date" id="fecha">
-        <input type="time" id="horaInicio">
-        <input type="time" id="horaFin">
-        <button onclick="agregarTurno()">Guardar Turno</button>
+        <div class="agregar-turno">
+            <h3>Agregar Turno</h3>
+            <div class="flex-row">
+                <input type="date" id="fecha">
+                <input type="time" id="horaInicio">
+                <input type="time" id="horaFin">
+            </div>
+            <textarea id="observaciones" placeholder="Agregar observaciones (opcional)"></textarea>
+            <br>
+            <button onclick="agregarTurno()">Guardar Turno</button>
+        </div>
+
         <h3>Turnos Registrados</h3>
         <div id="listaTurnos"></div>
     </div>
-    
-    <!-- Configuración de Firebase -->
-    <script type="module">
-        // Importar los módulos de Firebase
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
-        // Configuración de Firebase (debes pegar tu propia configuración aquí)
-        const firebaseConfig = {
-            apiKey: "AIzaSyDJgUi1aC0uXRpcJ7P3v4WPwyFmFpJd9Ao",
-            authDomain: "calendario-andrea.firebaseapp.com",
-            projectId: "calendario-andrea",
-            storageBucket: "calendario-andrea.firebasestorage.app",
-            messagingSenderId: "583479742693",
-            appId: "1:583479742693:web:a2d2148f92f804147b440c"
-        };
+    <script>
+        document.addEventListener("DOMContentLoaded", mostrarTurnos);
 
-        // Inicializar Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app); // Base de datos Firestore
-
-        // Función para agregar un turno a Firestore
-        async function agregarTurno() {
+        function agregarTurno() {
             let fecha = document.getElementById("fecha").value;
             let horaInicio = document.getElementById("horaInicio").value;
             let horaFin = document.getElementById("horaFin").value;
+            let observaciones = document.getElementById("observaciones").value;
 
             if (!fecha || !horaInicio || !horaFin) {
                 alert("Por favor, completa todos los campos.");
                 return;
             }
 
-            // Validar que la hora de inicio no sea después de la de fin
-            if (horaInicio >= horaFin) {
-                alert("La hora de inicio no puede ser posterior a la hora de fin.");
-                return;
-            }
-
-            try {
-                // Agregar el turno a Firestore
-                await addDoc(collection(db, "turnos"), {
-                    fecha: fecha,
-                    horaInicio: horaInicio,
-                    horaFin: horaFin
-                });
-                console.log("Turno guardado con éxito");
-                mostrarTurnos(); // Mostrar los turnos después de agregar uno
-            } catch (e) {
-                console.error("Error al agregar el turno: ", e);
-            }
+            let turnos = JSON.parse(localStorage.getItem("turnos")) || [];
+            turnos.push({ fecha, horaInicio, horaFin, observaciones });
+            localStorage.setItem("turnos", JSON.stringify(turnos));
+            mostrarTurnos();
         }
 
-        // Función para mostrar los turnos guardados
-        async function mostrarTurnos() {
-            const querySnapshot = await getDocs(collection(db, "turnos"));
-            const lista = document.getElementById("listaTurnos");
-            lista.innerHTML = ""; // Limpiar la lista antes de mostrar los turnos
+        function mostrarTurnos() {
+            let lista = document.getElementById("listaTurnos");
+            lista.innerHTML = "";
+            let turnos = JSON.parse(localStorage.getItem("turnos")) || [];
+            let turnosPorDia = {};
 
-            querySnapshot.forEach((doc) => {
-                const turno = doc.data();
-                const div = document.createElement("div");
-                div.className = "turno";
-                div.innerHTML = `${turno.fecha} - ${formatearHora(turno.horaInicio)} a ${formatearHora(turno.horaFin)} 
-                <button onclick="eliminarTurno('${doc.id}')">❌</button>`;
-                lista.appendChild(div);
+            // Agrupar los turnos por fecha
+            turnos.forEach((turno) => {
+                if (!turnosPorDia[turno.fecha]) {
+                    turnosPorDia[turno.fecha] = [];
+                }
+                turnosPorDia[turno.fecha].push(turno);
             });
-        }
 
-        // Función para eliminar un turno
-        async function eliminarTurno(id) {
-            try {
-                // Eliminar el turno usando su id
-                await deleteDoc(doc(db, "turnos", id));
-                console.log("Turno eliminado con éxito");
-                mostrarTurnos(); // Actualizar la lista después de eliminar
-            } catch (e) {
-                console.error("Error al eliminar el turno: ", e);
+            // Mostrar los turnos agrupados por día
+            for (let fecha in turnosPorDia) {
+                let divDia = document.createElement("div");
+                divDia.className = "dia";
+
+                // Convertir la fecha al formato de día y mes
+                let fechaFormateada = new Date(fecha);
+                let opciones = { year: 'numeric', month: 'long', day: 'numeric' };
+                let fechaTexto = fechaFormateada.toLocaleDateString('es-ES', opciones);
+
+                divDia.innerHTML = `<h4>${fechaTexto}</h4>`;
+
+                turnosPorDia[fecha].forEach((turno, index) => {
+                    let divTurno = document.createElement("div");
+                    divTurno.className = "turno";
+                    divTurno.innerHTML = `${turno.horaInicio} a ${turno.horaFin} 
+                    <p>${turno.observaciones || "Sin observaciones"}</p>
+                    <button class="eliminar-btn" onclick="eliminarTurno(${index})">Eliminar</button>`;
+                    divDia.appendChild(divTurno);
+                });
+
+                lista.appendChild(divDia);
+                lista.appendChild(document.createElement('hr')); // Separador visual entre días
             }
         }
 
-        // Función para formatear la hora en un formato más legible
-        function formatearHora(hora) {
-            let [h, m] = hora.split(":");
-            return `${h}:${m}`;
+        function eliminarTurno(index) {
+            let turnos = JSON.parse(localStorage.getItem("turnos")) || [];
+            turnos.splice(index, 1);
+            localStorage.setItem("turnos", JSON.stringify(turnos));
+            mostrarTurnos();
         }
-
-        // Mostrar los turnos al cargar la página
-        document.addEventListener("DOMContentLoaded", mostrarTurnos);
     </script>
 </body>
 </html>
