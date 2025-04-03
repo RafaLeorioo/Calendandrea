@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario de Horarios de Trabajo</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #f9f9f9; padding: 20px; }
+        .container { max-width: 600px; margin: auto; padding: 20px; background-color: #fff; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        h2 { color: #4CAF50; }
+        input, button { margin: 5px; padding: 8px; border-radius: 4px; border: 1px solid #ccc; }
+        input[type="date"], input[type="time"] { width: 120px; }
+        button { background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+        button:hover { background-color: #45a049; }
+        .turno { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #ccc; }
+        .turno button { background-color: #f44336; color: white; border: none; cursor: pointer; }
+        .turno button:hover { background-color: #e53935; }
+    </style>
+</head>
+<body>
+    <h2>Calendario de Horarios de Trabajo</h2>
+    <div class="container">
+        <h3>Agregar Turno</h3>
+        <input type="date" id="fecha">
+        <input type="time" id="horaInicio">
+        <input type="time" id="horaFin">
+        <button onclick="agregarTurno()">Guardar Turno</button>
+        <h3>Turnos Registrados</h3>
+        <div id="listaTurnos"></div>
+    </div>
+    
+    <!-- Configuración de Firebase -->
+    <script type="module">
+        // Importar los módulos de Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+        // Configuración de Firebase (debes pegar tu propia configuración aquí)
+        const firebaseConfig = {
+            apiKey: "AIzaSyDJgUi1aC0uXRpcJ7P3v4WPwyFmFpJd9Ao",
+            authDomain: "calendario-andrea.firebaseapp.com",
+            projectId: "calendario-andrea",
+            storageBucket: "calendario-andrea.firebasestorage.app",
+            messagingSenderId: "583479742693",
+            appId: "1:583479742693:web:a2d2148f92f804147b440c"
+        };
+
+        // Inicializar Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app); // Base de datos Firestore
+
+        // Función para agregar un turno a Firestore
+        async function agregarTurno() {
+            let fecha = document.getElementById("fecha").value;
+            let horaInicio = document.getElementById("horaInicio").value;
+            let horaFin = document.getElementById("horaFin").value;
+
+            if (!fecha || !horaInicio || !horaFin) {
+                alert("Por favor, completa todos los campos.");
+                return;
+            }
+
+            // Validar que la hora de inicio no sea después de la de fin
+            if (horaInicio >= horaFin) {
+                alert("La hora de inicio no puede ser posterior a la hora de fin.");
+                return;
+            }
+
+            try {
+                // Agregar el turno a Firestore
+                await addDoc(collection(db, "turnos"), {
+                    fecha: fecha,
+                    horaInicio: horaInicio,
+                    horaFin: horaFin
+                });
+                console.log("Turno guardado con éxito");
+                mostrarTurnos(); // Mostrar los turnos después de agregar uno
+            } catch (e) {
+                console.error("Error al agregar el turno: ", e);
+            }
+        }
+
+        // Función para mostrar los turnos guardados
+        async function mostrarTurnos() {
+            const querySnapshot = await getDocs(collection(db, "turnos"));
+            const lista = document.getElementById("listaTurnos");
+            lista.innerHTML = ""; // Limpiar la lista antes de mostrar los turnos
+
+            querySnapshot.forEach((doc) => {
+                const turno = doc.data();
+                const div = document.createElement("div");
+                div.className = "turno";
+                div.innerHTML = `${turno.fecha} - ${formatearHora(turno.horaInicio)} a ${formatearHora(turno.horaFin)} 
+                <button onclick="eliminarTurno('${doc.id}')">❌</button>`;
+                lista.appendChild(div);
+            });
+        }
+
+        // Función para eliminar un turno
+        async function eliminarTurno(id) {
+            try {
+                // Eliminar el turno usando su id
+                await deleteDoc(doc(db, "turnos", id));
+                console.log("Turno eliminado con éxito");
+                mostrarTurnos(); // Actualizar la lista después de eliminar
+            } catch (e) {
+                console.error("Error al eliminar el turno: ", e);
+            }
+        }
+
+        // Función para formatear la hora en un formato más legible
+        function formatearHora(hora) {
+            let [h, m] = hora.split(":");
+            return `${h}:${m}`;
+        }
+
+        // Mostrar los turnos al cargar la página
+        document.addEventListener("DOMContentLoaded", mostrarTurnos);
+    </script>
+</body>
+</html>
