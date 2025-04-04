@@ -115,10 +115,10 @@
     document.addEventListener("DOMContentLoaded", mostrarTurnos);
 
     function agregarTurno() {
-      const fecha = fecha.value;
-      const horaInicio = horaInicio.value;
-      const horaFin = horaFin.value;
-      const observaciones = observaciones.value;
+      const fecha = document.getElementById("fecha").value;
+      const horaInicio = document.getElementById("horaInicio").value;
+      const horaFin = document.getElementById("horaFin").value;
+      const observaciones = document.getElementById("observaciones").value;
 
       if (!fecha || !horaInicio || !horaFin || horaFin <= horaInicio) {
         alert("Rellena bien los campos.");
@@ -161,10 +161,10 @@
 
     function eliminarTurno(dia, index) {
       const turnos = JSON.parse(localStorage.getItem("turnos")) || [];
-      const filtrados = turnos.filter(t => !(t.fecha === dia));
+      const restantes = turnos.filter(t => t.fecha !== dia);
       const mismosDia = turnos.filter(t => t.fecha === dia);
       mismosDia.splice(index, 1);
-      const nuevos = filtrados.concat(mismosDia);
+      const nuevos = restantes.concat(mismosDia);
       localStorage.setItem("turnos", JSON.stringify(nuevos));
       mostrarTurnos();
     }
