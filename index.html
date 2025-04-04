@@ -170,14 +170,25 @@
     .boton-fijo:hover {
       background-color: #2980b9;
     }
+
+    /* Estilo para el título "Seleccionar día" dentro del bloque */
+    .titulo-seleccionar-dia {
+      font-size: 1rem;
+      font-weight: normal;
+      color: #2c3e50;
+      text-align: center;
+      margin-bottom: 2vh;
+    }
+
   </style>
 </head>
 <body>
-  <h2 id="inicio">Calendario de Horarios</h2>
 
   <!-- Registro de turnos -->
   <div class="registro-turnos">
-    <h3>Seleccionar Día</h3>
+    <!-- Título "Seleccionar día" dentro del bloque -->
+    <h3 class="titulo-seleccionar-dia">Seleccionar día</h3>
+    
     <input type="date" id="fecha" placeholder="Selecciona una fecha" />
     <div class="hora-inputs">
       <div>
