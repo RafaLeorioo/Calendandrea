@@ -211,8 +211,8 @@
       color: white;
       border: none;
       border-radius: 50%;
-      padding: 15px;
-      font-size: 2rem;
+      padding: 10px 12px;  /* Tamaño más pequeño y fijo */
+      font-size: 1.5rem;    /* Tamaño pequeño */
       cursor: pointer;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
       transition: background-color 0.3s ease;
@@ -294,50 +294,4 @@
 
       // Reorganizar los turnos en el orden de fechas y por hora dentro de cada día
       let turnosOrdenados = [];
-      fechasOrdenadas.forEach((fecha) => {
-        turnosPorDia[fecha].sort((a, b) => a.horaInicio.localeCompare(b.horaInicio)); // Ordenar por hora de inicio
-        turnosOrdenados = [...turnosOrdenados, ...turnosPorDia[fecha]];
-      });
-
-      // Mostrar los turnos agrupados por día
-      for (let fecha in turnosPorDia) {
-        let divDia = document.createElement("div");
-        divDia.className = "dia";
-
-        let fechaFormateada = new Date(fecha);
-        let opciones = { year: "numeric", month: "long", day: "numeric" };
-        let fechaTexto = fechaFormateada.toLocaleDateString("es-ES", opciones);
-
-        let titulo = document.createElement("h4");
-        titulo.textContent = fechaTexto;
-        divDia.appendChild(titulo);
-
-        turnosPorDia[fecha].forEach((turno, index) => {
-          let divTurno = document.createElement("div");
-          divTurno.className = "turno";
-          divTurno.innerHTML = `
-            <strong>${turno.horaInicio} a ${turno.horaFin}</strong>
-            <p>${turno.observaciones || "Sin observaciones"}</p>
-            <button class="eliminar-btn" onclick="eliminarTurno(${index})">Eliminar</button>
-          `;
-          divDia.appendChild(divTurno);
-        });
-
-        lista.appendChild(divDia);
-      }
-    }
-
-    function eliminarTurno(index) {
-      let turnos = JSON.parse(localStorage.getItem("turnos")) || [];
-      turnos.splice(index, 1);
-      localStorage.setItem("turnos", JSON.stringify(turnos));
-      mostrarTurnos();
-    }
-
-    // Función para desplazarse hacia arriba
-    function scrollToTop() {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  </script>
-</body>
-</html>
+      fechasOrden
