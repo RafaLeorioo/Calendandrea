@@ -143,10 +143,10 @@
   <h2 id="inicio">Calendario de Horarios</h2>
   <div class="container">
     <h3>Agregar Turno</h3>
-    <input type="date" id="fecha" />
+    <input type="date" id="fecha" placeholder="Selecciona una fecha" />
     <div class="hora-inputs">
-      <input type="time" id="horaInicio" />
-      <input type="time" id="horaFin" />
+      <input type="time" id="horaInicio" placeholder="Hora de inicio" />
+      <input type="time" id="horaFin" placeholder="Hora de fin" />
     </div>
     <textarea id="observaciones" placeholder="Observaciones (opcional)"></textarea>
     <button onclick="agregarTurno()">Guardar Turno</button>
@@ -168,7 +168,7 @@
       const observaciones = document.getElementById("observaciones").value;
 
       if (!fecha || !horaInicio || !horaFin || horaFin <= horaInicio) {
-        alert("Rellena bien los campos.");
+        alert("La hora de inicio no puede ser más tarde que la de fin.");
         return;
       }
 
