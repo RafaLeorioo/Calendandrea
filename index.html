@@ -64,29 +64,54 @@
       padding: 2vh;
       border-radius: 8px;
       margin-bottom: 2vh;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    .turno p { margin-bottom: 1vh; }
+    .turno-info {
+      flex-grow: 1;
+    }
+
+    .turno-info p { margin-bottom: 1vh; }
 
     .eliminar-btn {
       background: #e74c3c;
-      padding: 1vh 2vw;
-      font-size: 0.9rem;
-      border-radius: 20px;
+      width: 50px;
+      height: 50px;
+      font-size: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: 2vw;
+      cursor: pointer;
     }
 
     .eliminar-btn:hover { background: #c0392b; }
 
     .dia {
       margin-top: 3vh;
-      padding-top: 2vh;
-      border-top: 2px solid #3498db;
     }
 
-    .dia h4 {
+    .titulo-dia {
+      display: flex;
+      align-items: center;
+      gap: 1vw;
+      margin-bottom: 1.5vh;
+    }
+
+    .titulo-dia h4 {
       font-size: 1.1rem;
       color: #2980b9;
-      margin-bottom: 1vh;
+      white-space: nowrap;
+      margin: 0;
+    }
+
+    .titulo-dia .linea {
+      flex-grow: 1;
+      height: 2px;
+      background-color: #3498db;
     }
 
     /* BOTÓN FLOTANTE */
@@ -172,7 +197,12 @@
         const opciones = { year: "numeric", month: "long", day: "numeric" };
         const fechaFormateada = fechaObj.toLocaleDateString("es-ES", opciones);
 
-        diaDiv.innerHTML = `<h4>${fechaFormateada}</h4>`;
+        diaDiv.innerHTML = `
+          <div class="titulo-dia">
+            <h4>${fechaFormateada}</h4>
+            <div class="linea"></div>
+          </div>
+        `;
 
         agrupados[dia]
           .sort((a, b) => a.horaInicio.localeCompare(b.horaInicio))
@@ -180,9 +210,11 @@
             const div = document.createElement("div");
             div.className = "turno";
             div.innerHTML = `
-              <p><strong>${t.horaInicio} - ${t.horaFin}</strong></p>
-              ${t.observaciones ? `<p>${t.observaciones}</p>` : ""}
-              <button class="eliminar-btn" onclick="eliminarTurno('${dia}', ${i})">Eliminar</button>
+              <div class="turno-info">
+                <p><strong>${t.horaInicio} - ${t.horaFin}</strong></p>
+                ${t.observaciones ? `<p>${t.observaciones}</p>` : ""}
+              </div>
+              <button class="eliminar-btn" onclick="eliminarTurno('${dia}', ${i})">×</button>
             `;
             diaDiv.appendChild(div);
           });
