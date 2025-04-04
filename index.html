@@ -25,14 +25,14 @@
 
     h2 {
       color: #2c3e50;
-      margin-bottom: 1.5vh; /* Reducido el espacio entre el título principal y el siguiente */
+      margin-bottom: 1.5vh;
       font-size: 4vw;
     }
 
     h3 {
       color: #34495e;
-      margin-top: 1vh; /* Reducido el espacio entre "Agregar Turno" y el resto */
-      margin-bottom: 2vh; /* Reducido el espacio debajo del título "Agregar Turno" */
+      margin-top: 1vh;
+      margin-bottom: 2vh;
       font-size: 3.5vw;
     }
 
@@ -47,13 +47,12 @@
     }
 
     .agregar-turno {
-      position: sticky;
-      top: 5vh;
       background-color: #fff;
       padding: 4vh 4vw;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       z-index: 10;
       border-radius: 8px;
+      margin-bottom: 3vh;
     }
 
     .flex-row {
@@ -202,6 +201,26 @@
         padding: 2vh 3vw;
       }
     }
+
+    /* Botón flotante de "Volver arriba" */
+    .scroll-to-top-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      padding: 15px;
+      font-size: 2rem;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s ease;
+    }
+
+    .scroll-to-top-btn:hover {
+      background-color: #2980b9;
+    }
   </style>
 </head>
 <body>
@@ -228,6 +247,9 @@
     <div id="listaTurnos"></div>
   </div>
 
+  <!-- Botón flotante para volver arriba -->
+  <button class="scroll-to-top-btn" onclick="scrollToTop()">↑</button>
+
   <script>
     document.addEventListener("DOMContentLoaded", mostrarTurnos);
 
@@ -248,10 +270,16 @@
       }
 
       let turnos = JSON.parse(localStorage.getItem("turnos")) || [];
-      // Agrupar por día
-      let turnosPorDia = {};
-
       turnos.push({ fecha, horaInicio, horaFin, observaciones });
+      localStorage.setItem("turnos", JSON.stringify(turnos));
+      mostrarTurnos();
+    }
+
+    function mostrarTurnos() {
+      let lista = document.getElementById("listaTurnos");
+      lista.innerHTML = "";
+      let turnos = JSON.parse(localStorage.getItem("turnos")) || [];
+      let turnosPorDia = {};
 
       // Agrupar los turnos por fecha
       turnos.forEach((turno) => {
@@ -269,24 +297,6 @@
       fechasOrdenadas.forEach((fecha) => {
         turnosPorDia[fecha].sort((a, b) => a.horaInicio.localeCompare(b.horaInicio)); // Ordenar por hora de inicio
         turnosOrdenados = [...turnosOrdenados, ...turnosPorDia[fecha]];
-      });
-
-      localStorage.setItem("turnos", JSON.stringify(turnosOrdenados));
-      mostrarTurnos();
-    }
-
-    function mostrarTurnos() {
-      let lista = document.getElementById("listaTurnos");
-      lista.innerHTML = "";
-      let turnos = JSON.parse(localStorage.getItem("turnos")) || [];
-      let turnosPorDia = {};
-
-      // Agrupar los turnos por fecha
-      turnos.forEach((turno) => {
-        if (!turnosPorDia[turno.fecha]) {
-          turnosPorDia[turno.fecha] = [];
-        }
-        turnosPorDia[turno.fecha].push(turno);
       });
 
       // Mostrar los turnos agrupados por día
@@ -322,6 +332,11 @@
       turnos.splice(index, 1);
       localStorage.setItem("turnos", JSON.stringify(turnos));
       mostrarTurnos();
+    }
+
+    // Función para desplazarse hacia arriba
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   </script>
 </body>
