@@ -2,10 +2,11 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Calendario de Horarios</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
+
     body {
       font-family: sans-serif;
       background: #f4f7fc;
@@ -76,25 +77,45 @@
 
     .eliminar-btn:hover { background: #c0392b; }
 
-    .scroll-to-top-btn {
+    .dia {
+      margin-top: 3vh;
+      padding-top: 2vh;
+      border-top: 2px solid #3498db;
+    }
+
+    .dia h4 {
+      font-size: 1.1rem;
+      color: #2980b9;
+      margin-bottom: 1vh;
+    }
+
+    /* BOTÓN FLOTANTE */
+    .boton-fijo {
       position: fixed;
       bottom: 20px;
       right: 20px;
-      background: #3498db;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: #3498db;
       color: white;
       border: none;
-      border-radius: 50%;
-      padding: 12px;
-      font-size: 1.2rem;
+      font-size: 20px;
       cursor: pointer;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .scroll-to-top-btn:hover { background: #2980b9; }
+    .boton-fijo:hover {
+      background-color: #2980b9;
+    }
   </style>
 </head>
 <body>
-  <h2>Calendario de Horarios</h2>
+  <h2 id="inicio">Calendario de Horarios</h2>
   <div class="container">
     <h3>Agregar Turno</h3>
     <input type="date" id="fecha" />
@@ -109,7 +130,8 @@
     <div id="listaTurnos"></div>
   </div>
 
-  <button class="scroll-to-top-btn" onclick="scrollToTop()">↑</button>
+  <!-- BOTÓN FLOTANTE PARA VOLVER ARRIBA -->
+  <button class="boton-fijo" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">↑</button>
 
   <script>
     document.addEventListener("DOMContentLoaded", mostrarTurnos);
@@ -144,17 +166,27 @@
 
       Object.keys(agrupados).sort().forEach(dia => {
         const diaDiv = document.createElement("div");
-        diaDiv.innerHTML = `<h4>${dia}</h4>`;
-        agrupados[dia].sort((a, b) => a.horaInicio.localeCompare(b.horaInicio)).forEach((t, i) => {
-          const div = document.createElement("div");
-          div.className = "turno";
-          div.innerHTML = `
-            <p><strong>${t.horaInicio} - ${t.horaFin}</strong></p>
-            ${t.observaciones ? `<p>${t.observaciones}</p>` : ""}
-            <button class="eliminar-btn" onclick="eliminarTurno('${dia}', ${i})">Eliminar</button>
-          `;
-          diaDiv.appendChild(div);
-        });
+        diaDiv.className = "dia";
+
+        const fechaObj = new Date(dia);
+        const opciones = { year: "numeric", month: "long", day: "numeric" };
+        const fechaFormateada = fechaObj.toLocaleDateString("es-ES", opciones);
+
+        diaDiv.innerHTML = `<h4>${fechaFormateada}</h4>`;
+
+        agrupados[dia]
+          .sort((a, b) => a.horaInicio.localeCompare(b.horaInicio))
+          .forEach((t, i) => {
+            const div = document.createElement("div");
+            div.className = "turno";
+            div.innerHTML = `
+              <p><strong>${t.horaInicio} - ${t.horaFin}</strong></p>
+              ${t.observaciones ? `<p>${t.observaciones}</p>` : ""}
+              <button class="eliminar-btn" onclick="eliminarTurno('${dia}', ${i})">Eliminar</button>
+            `;
+            diaDiv.appendChild(div);
+          });
+
         lista.appendChild(diaDiv);
       });
     }
@@ -167,10 +199,6 @@
       const nuevos = restantes.concat(mismosDia);
       localStorage.setItem("turnos", JSON.stringify(nuevos));
       mostrarTurnos();
-    }
-
-    function scrollToTop() {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   </script>
 </body>
