@@ -22,20 +22,10 @@
       text-align: center;
     }
 
-    /* Estilo personalizado para las etiquetas h3 */
     h3 {
       font-size: 1rem;
       font-weight: normal;
       margin-bottom: 2vh;
-    }
-
-    .container {
-      max-width: 800px;
-      margin: auto;
-      padding: 4vh 4vw;
-      border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      background: #fff;
     }
 
     /* Estilos para separar el bloque de registro de turnos */
@@ -66,15 +56,14 @@
     textarea {
       resize: none;
       height: 8vh;
-      font-size: 1rem; 
+      font-size: 1rem;
       padding: 1vh 1vw;
     }
 
-    /* Estilo para el placeholder */
     textarea::placeholder {
-      font-size: 1rem; 
-      color: #333; 
-      text-align: center; 
+      font-size: 1rem;
+      color: #333;
+      text-align: center;
     }
 
     .hora-inputs {
@@ -159,7 +148,6 @@
       background-color: #3498db;
     }
 
-    /* BOTÓN FLOTANTE */
     .boton-fijo {
       position: fixed;
       bottom: 20px;
@@ -186,30 +174,29 @@
 </head>
 <body>
   <h2 id="inicio">Calendario de Horarios</h2>
-  <div class="container">
-    <!-- Registro de turnos -->
-    <div class="registro-turnos">
-      <h3>Seleccionar Día</h3>
-      <input type="date" id="fecha" placeholder="Selecciona una fecha" />
-      <div class="hora-inputs">
-        <div>
-          <label for="horaInicio">Hora de inicio</label>
-          <input type="time" id="horaInicio" placeholder="Hora de inicio" />
-        </div>
-        <div>
-          <label for="horaFin">Hora de fin</label>
-          <input type="time" id="horaFin" placeholder="Hora de fin" />
-        </div>
-      </div>
-      <textarea id="observaciones" placeholder="Observaciones (opcional)"></textarea>
-      <button onclick="agregarTurno()">Guardar Turno</button>
-    </div>
 
-    <!-- Lista de turnos registrados -->
-    <div class="lista-turnos">
-      <h3>Turnos Registrados</h3>
-      <div id="listaTurnos"></div>
+  <!-- Registro de turnos -->
+  <div class="registro-turnos">
+    <h3>Seleccionar Día</h3>
+    <input type="date" id="fecha" placeholder="Selecciona una fecha" />
+    <div class="hora-inputs">
+      <div>
+        <label for="horaInicio">Hora de inicio</label>
+        <input type="time" id="horaInicio" placeholder="Hora de inicio" />
+      </div>
+      <div>
+        <label for="horaFin">Hora de fin</label>
+        <input type="time" id="horaFin" placeholder="Hora de fin" />
+      </div>
     </div>
+    <textarea id="observaciones" placeholder="Observaciones (opcional)"></textarea>
+    <button onclick="agregarTurno()">Guardar Turno</button>
+  </div>
+
+  <!-- Lista de turnos registrados -->
+  <div class="lista-turnos">
+    <h3>Turnos Registrados</h3>
+    <div id="listaTurnos"></div>
   </div>
 
   <!-- BOTÓN FLOTANTE PARA VOLVER ARRIBA -->
