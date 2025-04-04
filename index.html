@@ -47,7 +47,16 @@
       gap: 2%;
     }
 
-    .hora-inputs input { width: 49%; }
+    .hora-inputs div {
+      width: 49%;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5vh;
+      font-size: 0.9rem;
+      color: #333;
+    }
 
     button {
       background: #3498db;
@@ -145,8 +154,14 @@
     <h3>Agregar Turno</h3>
     <input type="date" id="fecha" placeholder="Selecciona una fecha" />
     <div class="hora-inputs">
-      <input type="time" id="horaInicio" placeholder="Hora de inicio" />
-      <input type="time" id="horaFin" placeholder="Hora de fin" />
+      <div>
+        <label for="horaInicio">Hora de inicio</label>
+        <input type="time" id="horaInicio" placeholder="Hora de inicio" />
+      </div>
+      <div>
+        <label for="horaFin">Hora de fin</label>
+        <input type="time" id="horaFin" placeholder="Hora de fin" />
+      </div>
     </div>
     <textarea id="observaciones" placeholder="Observaciones (opcional)"></textarea>
     <button onclick="agregarTurno()">Guardar Turno</button>
