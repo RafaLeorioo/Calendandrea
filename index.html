@@ -1,247 +1,239 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calendario de Horarios de Trabajo</title>
-    <style>
-        /* Reseteo básico y fuente global */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calendario de Horarios de Trabajo</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7fc;
-            color: #333;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f7fc;
+      color: #333;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-        h2 {
-            color: #2c3e50;
-            margin-bottom: 20px;
-        }
+    h2 {
+      color: #2c3e50;
+      margin-bottom: 20px;
+    }
 
-        h3 {
-            color: #34495e;
-            margin-top: 20px;
-        }
+    h3 {
+      color: #34495e;
+      margin-top: 20px;
+    }
 
-        /* Estilos del contenedor principal */
-        .container {
-            max-width: 800px;
-            margin: auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
 
-        /* Fijar la sección de agregar turno en la parte superior */
-        .agregar-turno {
-            position: sticky;
-            top: 20px;
-            background-color: #fff;
-            padding: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            z-index: 10;
-            border-radius: 8px;
-        }
+    .agregar-turno {
+      position: sticky;
+      top: 20px;
+      background-color: #fff;
+      padding: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      z-index: 10;
+      border-radius: 8px;
+    }
 
-        /* Estilo de los campos de entrada */
-        input[type="date"], input[type="time"], textarea {
-            padding: 12px;
-            font-size: 16px;
-            border: 2px solid #ccc;
-            border-radius: 5px;
-            margin-bottom: 15px;
-            width: calc(33.33% - 10px);
-            margin-right: 10px;
-        }
+    input[type="date"],
+    input[type="time"],
+    textarea {
+      padding: 12px;
+      font-size: 16px;
+      border: 2px solid #ccc;
+      border-radius: 5px;
+      margin-bottom: 15px;
+      width: calc(33.33% - 10px);
+      margin-right: 10px;
+    }
 
-        textarea {
-            width: 100%;
-            height: 80px;
-            resize: none;
-        }
+    textarea {
+      width: 100%;
+      height: 80px;
+      resize: none;
+    }
 
-        button {
-            padding: 12px 20px;
-            font-size: 16px;
-            background-color: #3498db;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+    button {
+      padding: 12px 20px;
+      font-size: 16px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
 
-        button:hover {
-            background-color: #2980b9;
-        }
+    button:hover {
+      background-color: #2980b9;
+    }
 
-        /* Estilos para la separación de días */
-        .dia {
-            margin-top: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #3498db;
-        }
+    .dia {
+      margin-top: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #3498db;
+    }
 
-        .dia h4 {
-            color: #2980b9;
-            font-size: 20px;
-            margin-bottom: 10px;
-        }
+    .dia h4 {
+      color: #2980b9;
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
 
-        /* Estilo para las tarjetas de turnos */
-        .turno {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            padding: 15px;
-            margin-bottom: 15px;
-            background-color: #ecf0f1;
-            border-radius: 10px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-        }
+    .turno {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 15px;
+      margin-bottom: 15px;
+      background-color: #ecf0f1;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
 
-        .turno p {
-            font-size: 14px;
-            color: #7f8c8d;
-        }
+    .turno p {
+      font-size: 14px;
+      color: #7f8c8d;
+    }
 
-        /* Mejorar los botones de eliminación */
-        .eliminar-btn {
-            background-color: #e74c3c;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 50px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background-color 0.3s ease;
-            margin-top: 10px;
-        }
+    .eliminar-btn {
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s ease;
+      margin-top: 10px;
+    }
 
-        .eliminar-btn:hover {
-            background-color: #c0392b;
-        }
+    .eliminar-btn:hover {
+      background-color: #c0392b;
+    }
 
-        /* Estilo para las etiquetas y los campos */
-        .flex-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
+    .flex-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
 
-        /* Separar días de forma más visual */
-        .separador-dia {
-            margin-top: 20px;
-            margin-bottom: 20px;
-            border-top: 2px solid #3498db;
-            border-bottom: 2px solid #3498db;
-            padding: 5px 0;
-        }
-
-        /* Estilo para la lista de turnos (permitir desplazamiento) */
-        #listaTurnos {
-            max-height: 400px;
-            overflow-y: auto;
-            padding-right: 10px;
-        }
-
-    </style>
+    #listaTurnos {
+      max-height: 400px;
+      overflow-y: auto;
+      padding-right: 10px;
+    }
+  </style>
 </head>
 <body>
-    <h2>Calendario de Horarios de Trabajo</h2>
-    <div class="container">
-        <div class="agregar-turno">
-            <h3>Agregar Turno</h3>
-            <div class="flex-row">
-                <input type="date" id="fecha">
-                <input type="time" id="horaInicio">
-                <input type="time" id="horaFin">
-            </div>
-            <textarea id="observaciones" placeholder="Agregar observaciones (opcional)"></textarea>
-            <br>
-            <button onclick="agregarTurno()">Guardar Turno</button>
-        </div>
-
-        <h3>Turnos Registrados</h3>
-        <div id="listaTurnos"></div>
+  <h2>Calendario de Horarios de Trabajo</h2>
+  <div class="container">
+    <div class="agregar-turno">
+      <h3>Agregar Turno</h3>
+      <div class="flex-row">
+        <input type="date" id="fecha" />
+        <input type="time" id="horaInicio" />
+        <input type="time" id="horaFin" />
+      </div>
+      <textarea
+        id="observaciones"
+        placeholder="Agregar observaciones (opcional)"
+      ></textarea>
+      <br />
+      <button onclick="agregarTurno()">Guardar Turno</button>
     </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", mostrarTurnos);
+    <h3>Turnos Registrados</h3>
+    <div id="listaTurnos"></div>
+  </div>
 
-        function agregarTurno() {
-            let fecha = document.getElementById("fecha").value;
-            let horaInicio = document.getElementById("horaInicio").value;
-            let horaFin = document.getElementById("horaFin").value;
-            let observaciones = document.getElementById("observaciones").value;
+  <script>
+    document.addEventListener("DOMContentLoaded", mostrarTurnos);
 
-            if (!fecha || !horaInicio || !horaFin) {
-                alert("Por favor, completa todos los campos.");
-                return;
-            }
+    function agregarTurno() {
+      let fecha = document.getElementById("fecha").value;
+      let horaInicio = document.getElementById("horaInicio").value;
+      let horaFin = document.getElementById("horaFin").value;
+      let observaciones = document.getElementById("observaciones").value;
 
-            let turnos = JSON.parse(localStorage.getItem("turnos")) || [];
-            turnos.push({ fecha, horaInicio, horaFin, observaciones });
-            localStorage.setItem("turnos", JSON.stringify(turnos));
-            mostrarTurnos();
+      if (!fecha || !horaInicio || !horaFin) {
+        alert("Por favor, completa todos los campos.");
+        return;
+      }
+
+      // Validación: hora de fin debe ser mayor que hora de inicio
+      if (horaFin <= horaInicio) {
+        alert("La hora de fin debe ser mayor que la hora de inicio.");
+        return;
+      }
+
+      let turnos = JSON.parse(localStorage.getItem("turnos")) || [];
+      turnos.push({ fecha, horaInicio, horaFin, observaciones });
+      localStorage.setItem("turnos", JSON.stringify(turnos));
+      mostrarTurnos();
+    }
+
+    function mostrarTurnos() {
+      let lista = document.getElementById("listaTurnos");
+      lista.innerHTML = "";
+      let turnos = JSON.parse(localStorage.getItem("turnos")) || [];
+      let turnosPorDia = {};
+
+      turnos.forEach((turno) => {
+        if (!turnosPorDia[turno.fecha]) {
+          turnosPorDia[turno.fecha] = [];
         }
+        turnosPorDia[turno.fecha].push(turno);
+      });
 
-        function mostrarTurnos() {
-            let lista = document.getElementById("listaTurnos");
-            lista.innerHTML = "";
-            let turnos = JSON.parse(localStorage.getItem("turnos")) || [];
-            let turnosPorDia = {};
+      for (let fecha in turnosPorDia) {
+        let divDia = document.createElement("div");
+        divDia.className = "dia";
 
-            // Agrupar los turnos por fecha
-            turnos.forEach((turno) => {
-                if (!turnosPorDia[turno.fecha]) {
-                    turnosPorDia[turno.fecha] = [];
-                }
-                turnosPorDia[turno.fecha].push(turno);
-            });
+        let fechaFormateada = new Date(fecha);
+        let opciones = { year: "numeric", month: "long", day: "numeric" };
+        let fechaTexto = fechaFormateada.toLocaleDateString("es-ES", opciones);
 
-            // Mostrar los turnos agrupados por día
-            for (let fecha in turnosPorDia) {
-                let divDia = document.createElement("div");
-                divDia.className = "dia";
+        let titulo = document.createElement("h4");
+        titulo.textContent = fechaTexto;
+        divDia.appendChild(titulo);
 
-                // Convertir la fecha al formato de día y mes
-                let fechaFormateada = new Date(fecha);
-                let opciones = { year: 'numeric', month: 'long', day: 'numeric' };
-                let fechaTexto = fechaFormateada.toLocaleDateString('es-ES', opciones);
+        turnosPorDia[fecha].forEach((turno, index) => {
+          let divTurno = document.createElement("div");
+          divTurno.className = "turno";
+          divTurno.innerHTML = `
+            <strong>${turno.horaInicio} a ${turno.horaFin}</strong>
+            <p>${turno.observaciones || "Sin observaciones"}</p>
+            <button class="eliminar-btn" onclick="eliminarTurno(${index})">Eliminar</button>
+          `;
+          divDia.appendChild(divTurno);
+        });
 
-                divDia.innerHTML = `<h4>${fechaTexto}</h4>`;
+        lista.appendChild(divDia);
+      }
+    }
 
-                turnosPorDia[fecha].forEach((turno, index) => {
-                    let divTurno = document.createElement("div");
-                    divTurno.className = "turno";
-                    divTurno.innerHTML = `${turno.horaInicio} a ${turno.horaFin} 
-                    <p>${turno.observaciones || "Sin observaciones"}</p>
-                    <button class="eliminar-btn" onclick="eliminarTurno(${index})">Eliminar</button>`;
-                    divDia.appendChild(divTurno);
-                });
-
-                lista.appendChild(divDia);
-                lista.appendChild(document.createElement('hr')); // Separador visual entre días
-            }
-        }
-
-        function eliminarTurno(index) {
-            let turnos = JSON.parse(localStorage.getItem("turnos")) || [];
-            turnos.splice(index, 1);
-            localStorage.setItem("turnos", JSON.stringify(turnos));
-            mostrarTurnos();
-        }
-    </script>
+    function eliminarTurno(index) {
+      let turnos = JSON.parse(localStorage.getItem("turnos")) || [];
+      turnos.splice(index, 1);
+      localStorage.setItem("turnos", JSON.stringify(turnos));
+      mostrarTurnos();
+    }
+  </script>
 </body>
 </html>
