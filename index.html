@@ -15,7 +15,7 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background-color: #f4f7fc;
       color: #333;
-      padding: 5vh 5vw; /* Se adapta al alto y ancho de la pantalla */
+      padding: 5vh 5vw;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -25,7 +25,7 @@
 
     h2 {
       color: #2c3e50;
-      margin-bottom: 2vh; /* Ajuste de espacio para pantallas pequeñas */
+      margin-bottom: 2vh;
       font-size: 4vw;
     }
 
@@ -36,7 +36,7 @@
     }
 
     .container {
-      width: 90vw; /* Ajuste para que se adapte al ancho de la pantalla */
+      width: 90vw;
       max-width: 800px;
       margin: auto;
       background-color: #fff;
@@ -53,6 +53,13 @@
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       z-index: 10;
       border-radius: 8px;
+    }
+
+    .flex-row {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      margin-bottom: 3vh;
     }
 
     input[type="date"],
@@ -131,22 +138,6 @@
 
     .eliminar-btn:hover {
       background-color: #c0392b;
-    }
-
-    .flex-row {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      margin-bottom: 3vh;
-    }
-
-    .flex-row input {
-      width: 32%;
-      margin-right: 2%;
-    }
-
-    .flex-row input:last-child {
-      margin-right: 0;
     }
 
     #listaTurnos {
@@ -247,8 +238,30 @@
       }
 
       let turnos = JSON.parse(localStorage.getItem("turnos")) || [];
+      // Agrupar por día
+      let turnosPorDia = {};
+
       turnos.push({ fecha, horaInicio, horaFin, observaciones });
-      localStorage.setItem("turnos", JSON.stringify(turnos));
+
+      // Agrupar los turnos por fecha
+      turnos.forEach((turno) => {
+        if (!turnosPorDia[turno.fecha]) {
+          turnosPorDia[turno.fecha] = [];
+        }
+        turnosPorDia[turno.fecha].push(turno);
+      });
+
+      // Ordenar las fechas
+      let fechasOrdenadas = Object.keys(turnosPorDia).sort((a, b) => new Date(a) - new Date(b));
+
+      // Reorganizar los turnos en el orden de fechas y por hora dentro de cada día
+      let turnosOrdenados = [];
+      fechasOrdenadas.forEach((fecha) => {
+        turnosPorDia[fecha].sort((a, b) => a.horaInicio.localeCompare(b.horaInicio)); // Ordenar por hora de inicio
+        turnosOrdenados = [...turnosOrdenados, ...turnosPorDia[fecha]];
+      });
+
+      localStorage.setItem("turnos", JSON.stringify(turnosOrdenados));
       mostrarTurnos();
     }
 
@@ -258,6 +271,7 @@
       let turnos = JSON.parse(localStorage.getItem("turnos")) || [];
       let turnosPorDia = {};
 
+      // Agrupar los turnos por fecha
       turnos.forEach((turno) => {
         if (!turnosPorDia[turno.fecha]) {
           turnosPorDia[turno.fecha] = [];
@@ -265,6 +279,7 @@
         turnosPorDia[turno.fecha].push(turno);
       });
 
+      // Mostrar los turnos agrupados por día
       for (let fecha in turnosPorDia) {
         let divDia = document.createElement("div");
         divDia.className = "dia";
