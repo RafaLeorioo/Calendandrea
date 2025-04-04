@@ -57,7 +57,7 @@
 
     .flex-row {
       display: flex;
-      flex-direction: column;
+      flex-direction: row; /* Cambio aquí: de columna a fila */
       justify-content: space-between;
       margin-bottom: 3vh;
     }
@@ -72,6 +72,11 @@
       margin-bottom: 3vh;
       width: 100%;
       box-sizing: border-box;
+    }
+
+    /* Ajuste para los inputs de hora, para estar en fila */
+    .hora-input {
+      width: 48%; /* Se usa 48% para dejar espacio entre ellos */
     }
 
     textarea {
@@ -203,8 +208,10 @@
       <h3>Agregar Turno</h3>
       <div class="flex-row">
         <input type="date" id="fecha" />
-        <input type="time" id="horaInicio" />
-        <input type="time" id="horaFin" />
+      </div>
+      <div class="flex-row">
+        <input type="time" id="horaInicio" class="hora-input" />
+        <input type="time" id="horaFin" class="hora-input" />
       </div>
       <textarea
         id="observaciones"
