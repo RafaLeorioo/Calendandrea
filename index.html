@@ -15,37 +15,41 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background-color: #f4f7fc;
       color: #333;
-      padding: 20px;
+      padding: 5vh 5vw; /* Se adapta al alto y ancho de la pantalla */
       display: flex;
       flex-direction: column;
       align-items: center;
+      height: 100vh;
+      overflow-y: auto;
     }
 
     h2 {
       color: #2c3e50;
-      margin-bottom: 20px;
+      margin-bottom: 2vh; /* Ajuste de espacio para pantallas pequeñas */
+      font-size: 4vw;
     }
 
     h3 {
       color: #34495e;
-      margin-top: 20px;
+      margin-top: 2vh;
+      font-size: 3.5vw;
     }
 
     .container {
-      max-width: 100%;
-      width: 800px;
+      width: 90vw; /* Ajuste para que se adapte al ancho de la pantalla */
+      max-width: 800px;
       margin: auto;
       background-color: #fff;
-      padding: 20px;
+      padding: 5vh 4vw;
       border-radius: 8px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     .agregar-turno {
       position: sticky;
-      top: 20px;
+      top: 5vh;
       background-color: #fff;
-      padding: 20px;
+      padding: 4vh 4vw;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       z-index: 10;
       border-radius: 8px;
@@ -54,23 +58,23 @@
     input[type="date"],
     input[type="time"],
     textarea {
-      padding: 12px;
-      font-size: 16px;
+      padding: 3vh 3vw;
+      font-size: 4vw;
       border: 2px solid #ccc;
       border-radius: 5px;
-      margin-bottom: 15px;
+      margin-bottom: 3vh;
       width: 100%;
       box-sizing: border-box;
     }
 
     textarea {
-      height: 80px;
+      height: 10vh;
       resize: none;
     }
 
     button {
-      padding: 12px 20px;
-      font-size: 16px;
+      padding: 3vh 4vw;
+      font-size: 4vw;
       background-color: #3498db;
       color: white;
       border: none;
@@ -86,30 +90,30 @@
     }
 
     .dia {
-      margin-top: 20px;
-      padding-bottom: 10px;
+      margin-top: 5vh;
+      padding-bottom: 2vh;
       border-bottom: 2px solid #3498db;
     }
 
     .dia h4 {
       color: #2980b9;
-      font-size: 20px;
-      margin-bottom: 10px;
+      font-size: 5vw;
+      margin-bottom: 2vh;
     }
 
     .turno {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      padding: 15px;
-      margin-bottom: 15px;
+      padding: 4vh 4vw;
+      margin-bottom: 3vh;
       background-color: #ecf0f1;
       border-radius: 10px;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     }
 
     .turno p {
-      font-size: 14px;
+      font-size: 4vw;
       color: #7f8c8d;
     }
 
@@ -117,12 +121,12 @@
       background-color: #e74c3c;
       color: white;
       border: none;
-      padding: 8px 16px;
+      padding: 3vh 4vw;
       border-radius: 50px;
       cursor: pointer;
-      font-size: 14px;
+      font-size: 3vw;
       transition: background-color 0.3s ease;
-      margin-top: 10px;
+      margin-top: 2vh;
     }
 
     .eliminar-btn:hover {
@@ -133,12 +137,12 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
-      margin-bottom: 20px;
+      margin-bottom: 3vh;
     }
 
     .flex-row input {
-      width: calc(33.33% - 10px);
-      margin-right: 10px;
+      width: 32%;
+      margin-right: 2%;
     }
 
     .flex-row input:last-child {
@@ -146,55 +150,57 @@
     }
 
     #listaTurnos {
-      max-height: 400px;
+      max-height: 45vh;
       overflow-y: auto;
-      padding-right: 10px;
+      padding-right: 2vw;
     }
 
-    /* Media Query para pantallas más pequeñas */
     @media (max-width: 768px) {
       .container {
-        padding: 15px;
+        padding: 5vh 4vw;
       }
 
       .agregar-turno {
-        padding: 15px;
-      }
-
-      .flex-row input {
-        width: 100%;
-        margin-bottom: 10px;
-      }
-
-      button {
-        padding: 12px;
-        font-size: 14px;
-      }
-
-      .turno {
-        padding: 10px;
+        padding: 3vh 4vw;
       }
 
       .dia h4 {
-        font-size: 18px;
+        font-size: 5vw;
+      }
+
+      button {
+        font-size: 5vw;
       }
 
       .eliminar-btn {
-        padding: 6px 12px;
+        padding: 2vh 4vw;
       }
     }
 
     @media (max-width: 480px) {
+      body {
+        padding: 5vh 3vw;
+      }
+
       h2 {
-        font-size: 20px;
+        font-size: 5vw;
       }
 
       h3 {
-        font-size: 18px;
+        font-size: 4vw;
       }
 
       .dia h4 {
-        font-size: 16px;
+        font-size: 6vw;
+      }
+
+      .turno p {
+        font-size: 5vw;
+      }
+
+      .eliminar-btn {
+        font-size: 5vw;
+        padding: 2vh 3vw;
       }
     }
   </style>
