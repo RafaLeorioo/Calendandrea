@@ -28,7 +28,6 @@
       margin-bottom: 2vh;
     }
 
-    /* Estilos para separar el bloque de registro de turnos */
     .registro-turnos {
       background: #fff;
       padding: 3vh 4vw;
@@ -171,21 +170,41 @@
       background-color: #2980b9;
     }
 
-    /* Estilo para el título "Seleccionar día" dentro del bloque */
+    /* Estilo para el botón flotante en la esquina inferior izquierda */
+    .boton-fijo-izquierda {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .boton-fijo-izquierda:hover {
+      background-color: #2980b9;
+    }
+
     .titulo-seleccionar-dia {
       font-size: 1rem;
       font-weight: normal;
       color: #2c3e50;
       text-align: center;
-      margin-bottom: 1vh; /* Ajuste aquí para coincidir con "Hora de inicio" */
+      margin-bottom: 1vh;
     }
 
-    /* Alineación centrada de los inputs dentro del bloque */
     .registro-turnos input[type="date"],
     .registro-turnos input[type="time"] {
-      text-align: center; /* Centra el texto dentro del input */
-      padding-left: 0; /* Asegura que el texto se centre sin añadir relleno innecesario */
-      padding-right: 0; /* Asegura que el texto se centre sin añadir relleno innecesario */
+      text-align: center;
     }
 
     .hora-inputs div {
@@ -201,7 +220,6 @@
 
   <!-- Registro de turnos -->
   <div class="registro-turnos">
-    <!-- Título "Seleccionar día" dentro del bloque -->
     <h3 class="titulo-seleccionar-dia">Seleccionar día</h3>
     
     <input type="date" id="fecha" placeholder="Selecciona una fecha" />
@@ -228,6 +246,9 @@
   <!-- BOTÓN FLOTANTE PARA VOLVER ARRIBA -->
   <button class="boton-fijo" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">↑</button>
 
+  <!-- BOTÓN FLOTANTE EN LA ESQUINA INFERIOR IZQUIERDA (sin función por ahora) -->
+  <button class="boton-fijo-izquierda" id="botonIzquierda">←</button>
+
   <script>
     document.addEventListener("DOMContentLoaded", mostrarTurnos);
 
@@ -244,7 +265,6 @@
 
       const turnos = JSON.parse(localStorage.getItem("turnos")) || [];
       
-      // Verificar si ya existe un turno con la misma fecha y el mismo rango horario
       const turnoExistente = turnos.find(t => t.fecha === fecha && t.horaInicio === horaInicio && t.horaFin === horaFin);
       
       if (turnoExistente) {
