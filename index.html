@@ -28,6 +28,7 @@
       margin-bottom: 2vh;
     }
 
+    /* Estilos para separar el bloque de registro de turnos */
     .registro-turnos {
       background: #fff;
       padding: 3vh 4vw;
@@ -170,7 +171,7 @@
       background-color: #2980b9;
     }
 
-    /* Estilo para el botón flotante en la esquina inferior izquierda */
+    /* Nuevo botón flotante a la izquierda */
     .boton-fijo-izquierda {
       position: fixed;
       bottom: 20px;
@@ -194,32 +195,13 @@
       background-color: #2980b9;
     }
 
-    .titulo-seleccionar-dia {
-      font-size: 1rem;
-      font-weight: normal;
-      color: #2c3e50;
-      text-align: center;
-      margin-bottom: 1vh;
-    }
-
-    .registro-turnos input[type="date"],
-    .registro-turnos input[type="time"] {
-      text-align: center;
-    }
-
-    .hora-inputs div {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-
   </style>
 </head>
 <body>
 
   <!-- Registro de turnos -->
   <div class="registro-turnos">
+    <!-- Título "Seleccionar día" dentro del bloque -->
     <h3 class="titulo-seleccionar-dia">Seleccionar día</h3>
     
     <input type="date" id="fecha" placeholder="Selecciona una fecha" />
@@ -246,8 +228,8 @@
   <!-- BOTÓN FLOTANTE PARA VOLVER ARRIBA -->
   <button class="boton-fijo" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">↑</button>
 
-  <!-- BOTÓN FLOTANTE EN LA ESQUINA INFERIOR IZQUIERDA (sin función por ahora) -->
-  <button class="boton-fijo-izquierda" id="botonIzquierda">←</button>
+  <!-- BOTÓN FLOTANTE A LA IZQUIERDA (sin función) -->
+  <button class="boton-fijo-izquierda"></button>
 
   <script>
     document.addEventListener("DOMContentLoaded", mostrarTurnos);
@@ -265,6 +247,7 @@
 
       const turnos = JSON.parse(localStorage.getItem("turnos")) || [];
       
+      // Verificar si ya existe un turno con la misma fecha y el mismo rango horario
       const turnoExistente = turnos.find(t => t.fecha === fecha && t.horaInicio === horaInicio && t.horaFin === horaFin);
       
       if (turnoExistente) {
