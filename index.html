@@ -28,7 +28,6 @@
       margin-bottom: 2vh;
     }
 
-    /* Estilos para separar el bloque de registro de turnos */
     .registro-turnos {
       background: #fff;
       padding: 3vh 4vw;
@@ -171,7 +170,6 @@
       background-color: #2980b9;
     }
 
-    /* Nuevo botón flotante a la izquierda */
     .boton-fijo-izquierda {
       position: fixed;
       bottom: 20px;
@@ -195,15 +193,51 @@
       background-color: #2980b9;
     }
 
+    .calendario {
+      background-color: #fff;
+      padding: 3vh 4vw;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin-top: 5vh;
+    }
+
+    #calendarContainer table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    #calendarContainer th, #calendarContainer td {
+      width: 14.28%;
+      padding: 10px;
+      text-align: center;
+    }
+
+    #calendarContainer th {
+      background-color: #3498db;
+      color: white;
+    }
+
+    #calendarContainer td {
+      border: 1px solid #ddd;
+      cursor: pointer;
+    }
+
+    #calendarContainer td:hover {
+      background-color: #f0f0f0;
+    }
+
+    .calendario-btns {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 2vh;
+    }
   </style>
 </head>
 <body>
 
   <!-- Registro de turnos -->
-  <div class="registro-turnos">
-    <!-- Título "Seleccionar día" dentro del bloque -->
+  <div class="registro-turnos" id="registroTurnos">
     <h3 class="titulo-seleccionar-dia">Seleccionar día</h3>
-    
     <input type="date" id="fecha" placeholder="Selecciona una fecha" />
     <div class="hora-inputs">
       <div>
@@ -220,19 +254,29 @@
   </div>
 
   <!-- Lista de turnos registrados -->
-  <div class="lista-turnos">
+  <div class="lista-turnos" id="turnosLista">
     <h3>Turnos Registrados</h3>
     <div id="listaTurnos"></div>
+  </div>
+
+  <!-- Calendario -->
+  <div class="calendario" id="calendario" style="display: none;">
+    <h3>Calendario del Mes</h3>
+    <div id="calendarContainer"></div>
+    <div class="calendario-btns">
+      <button onclick="cambiarMes(-1)">Mes Anterior</button>
+      <button onclick="cambiarMes(1)">Mes Siguiente</button>
+    </div>
   </div>
 
   <!-- BOTÓN FLOTANTE PARA VOLVER ARRIBA -->
   <button class="boton-fijo" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">↑</button>
 
-  <!-- BOTÓN FLOTANTE A LA IZQUIERDA (sin función) -->
-  <button class="boton-fijo-izquierda"></button>
+  <!-- BOTÓN FLOTANTE A LA IZQUIERDA -->
+  <button class="boton-fijo-izquierda" onclick="toggleCalendario()">📅</button>
 
   <script>
-    document.addEventListener("DOMContentLoaded", mostrarTurnos);
+    let fechaActual = new Date(); // Fecha del mes actual
 
     function agregarTurno() {
       const fecha = document.getElementById("fecha").value;
@@ -314,6 +358,81 @@
       localStorage.setItem("turnos", JSON.stringify(nuevos));
       mostrarTurnos();
     }
+
+    function mostrarCalendario() {
+      // Ocultamos la sección de "turnos registrados"
+      document.getElementById("turnosLista").style.display = "none";
+      
+      // Mostramos el calendario
+      document.getElementById("calendario").style.display = "block";
+      
+      // Generamos el calendario para el mes actual
+      mostrarCalendarioMes();
+    }
+
+    function mostrarCalendarioMes() {
+      const mes = fechaActual.getMonth();
+      const año = fechaActual.getFullYear();
+
+      const primerDiaDelMes = new Date(año, mes, 1);
+      const ultimoDiaDelMes = new Date(año, mes + 1, 0);
+
+      const diasDelMes = [];
+      for (let dia = 1; dia <= ultimoDiaDelMes.getDate(); dia++) {
+        const fecha = new Date(año, mes, dia);
+        diasDelMes.push(fecha);
+      }
+
+      let calendarHtml = '<table><thead><tr>';
+      const diasSemana = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+      diasSemana.forEach(dia => {
+        calendarHtml += `<th>${dia}</th>`;
+      });
+      calendarHtml += '</tr></thead><tbody><tr>';
+
+      for (let i = 0; i < primerDiaDelMes.getDay(); i++) {
+        calendarHtml += '<td></td>';
+      }
+
+      diasDelMes.forEach((fecha, index) => {
+        if ((index + primerDiaDelMes.getDay()) % 7 === 0 && index !== 0) {
+          calendarHtml += '</tr><tr>';
+        }
+        calendarHtml += `<td>${fecha.getDate()}</td>`;
+      });
+
+      while ((diasDelMes.length + primerDiaDelMes.getDay()) % 7 !== 0) {
+        calendarHtml += '<td></td>';
+        diasDelMes.push(null);
+      }
+
+      calendarHtml += '</tr></tbody></table>';
+      document.getElementById("calendarContainer").innerHTML = calendarHtml;
+    }
+
+    function cambiarMes(incremento) {
+      fechaActual.setMonth(fechaActual.getMonth() + incremento);
+      mostrarCalendarioMes();
+    }
+
+    function toggleCalendario() {
+      const calendario = document.getElementById("calendario");
+      const turnosLista = document.getElementById("turnosLista");
+      
+      if (calendario.style.display === "none") {
+        // Si el calendario está oculto, mostrarlo
+        calendario.style.display = "block";
+        turnosLista.style.display = "none";
+        mostrarCalendarioMes();
+      } else {
+        // Si el calendario está visible, mostrar la lista de turnos
+        calendario.style.display = "none";
+        turnosLista.style.display = "block";
+      }
+    }
+
+    // Mostrar los turnos cuando la página se carga
+    mostrarTurnos();
   </script>
 </body>
 </html>
