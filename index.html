@@ -213,7 +213,6 @@
       width: 14.28%;
       padding: 10px;
       text-align: center;
-      vertical-align: middle;
     }
 
     #calendarContainer th {
@@ -224,7 +223,6 @@
     #calendarContainer td {
       border: 1px solid #ddd;
       cursor: pointer;
-      position: relative;
     }
 
     #calendarContainer td:hover {
@@ -247,16 +245,6 @@
       font-size: 1.2rem;
       text-align: center;
       margin-bottom: 2vh;
-    }
-
-    .punto-rojo {
-      position: absolute;
-      top: 5px;
-      right: 5px;
-      width: 8px;
-      height: 8px;
-      background-color: red;
-      border-radius: 50%;
     }
   </style>
 </head>
@@ -330,7 +318,6 @@
       turnos.push({ fecha, horaInicio, horaFin, observaciones });
       localStorage.setItem("turnos", JSON.stringify(turnos));
       mostrarTurnos();
-      marcarDiasConTurnos();
     }
 
     function mostrarTurnos() {
@@ -386,20 +373,30 @@
       const nuevos = restantes.concat(mismosDia);
       localStorage.setItem("turnos", JSON.stringify(nuevos));
       mostrarTurnos();
-      marcarDiasConTurnos();
     }
 
     function toggleCalendario() {
       if (enCalendario) {
+        // Si estamos en el calendario, mostramos la vista de turnos y ocultamos el calendario.
         document.getElementById("turnosLista").style.display = "block";
         document.getElementById("calendario").style.display = "none";
       } else {
+        // Si no estamos en el calendario, mostramos el calendario y ocultamos la vista de turnos.
         document.getElementById("turnosLista").style.display = "none";
         document.getElementById("calendario").style.display = "block";
         mostrarCalendarioMes(); // Mostrar el mes actual del calendario
       }
 
+      // Alternamos el estado
       enCalendario = !enCalendario;
+    }
+
+    function cambiarMes(direccion) {
+      // Cambiar el mes de acuerdo a la dirección
+      fechaActual.setMonth(fechaActual.getMonth() + direccion);
+
+      // Actualizar el calendario con el nuevo mes
+      mostrarCalendarioMes();
     }
 
     function mostrarCalendarioMes() {
@@ -422,52 +419,32 @@
       });
       calendarHtml += '</tr></thead><tbody><tr>';
 
-      let diaActual = 1;
-      // Espacios vacíos antes del primer día del mes
-      for (let i = 0; i < primerDiaDelMes.getDay() - 1; i++) {
+      for (let i = 0; i < primerDiaDelMes.getDay(); i++) {
         calendarHtml += '<td></td>';
       }
 
-      for (let dia of diasDelMes) {
-        if (diaActual === dia.getDate()) {
-          const fechaDia = dia.toISOString().split('T')[0];
-          calendarHtml += `<td id="day-${fechaDia}" onclick="mostrarTurnosDelDia('${fechaDia}')">${dia.getDate()}<div class="punto-rojo" id="punto-${fechaDia}" style="display: none;"></div></td>`;
-          diaActual++;
-        }
-
-        if (diaActual > ultimoDiaDelMes.getDate()) break;
-
-        // Añadir un salto de línea (nueva fila) al llegar al final de la semana
-        if (dia.getDay() === 0 && diaActual <= ultimoDiaDelMes.getDate()) {
+      diasDelMes.forEach((fecha, index) => {
+        if ((index + primerDiaDelMes.getDay()) % 7 === 0 && index !== 0) {
           calendarHtml += '</tr><tr>';
         }
+        calendarHtml += `<td>${fecha.getDate()}</td>`;
+      });
+
+      while ((diasDelMes.length + primerDiaDelMes.getDay()) % 7 !== 0) {
+        calendarHtml += '<td></td>';
+        diasDelMes.push(null);
       }
 
       calendarHtml += '</tr></tbody></table>';
-      document.getElementById('calendarContainer').innerHTML = calendarHtml;
-      document.getElementById('mesActual').innerText = `${fechaActual.toLocaleString('default', { month: 'long' })} ${año}`;
-      marcarDiasConTurnos();
+      document.getElementById("calendarContainer").innerHTML = calendarHtml;
+
+      // Mostrar el mes actual
+      const mesActualTexto = fechaActual.toLocaleString("es-ES", { month: "long", year: "numeric" });
+      document.getElementById("mesActual").textContent = mesActualTexto;
     }
 
-    function marcarDiasConTurnos() {
-      const turnos = JSON.parse(localStorage.getItem("turnos")) || [];
-      const diasConTurnos = turnos.map(turno => turno.fecha);
-
-      diasConTurnos.forEach(dia => {
-        const punto = document.getElementById(`punto-${dia}`);
-        if (punto) {
-          punto.style.display = "block";
-        }
-      });
-    }
-
-    function cambiarMes(offset) {
-      fechaActual.setMonth(fechaActual.getMonth() + offset);
-      mostrarCalendarioMes();
-    }
-
+    // Inicializar turnos
     mostrarTurnos();
   </script>
-
 </body>
 </html>
